@@ -38,14 +38,6 @@ export const NavBar = () => (
       >
         Demo
       </NavLink>
-      <NavLink
-        to="/detect"
-        className={({ isActive }) =>
-          `${styles.link} ${isActive ? styles.active : ""}`
-        }
-      >
-        Detect
-      </NavLink>
     </div>
   </nav>
 );
@@ -129,15 +121,6 @@ function App() {
             element={
               <>
                 <Stream onAnalyze={handleAnalyze} accidents={accidents} streamType="demo" />
-                <SideBar accidents={accidents} />
-              </>
-            }
-          />
-          <Route
-            path="/detect"
-            element={
-              <>
-                <Stream onAnalyze={handleAnalyze} accidents={accidents} />
                 <SideBar accidents={accidents} />
               </>
             }

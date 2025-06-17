@@ -3,18 +3,7 @@ import axios from "axios";
 const route = "https://cdbackend.onrender.com";
 const localRoute = "http://localhost:5053";
 
-// Legacy - all streams (backward compatibility)
-export const getStreams = async () => {
-  try {
-    const res = await axios.get(`${route}/streams`);
-    console.log(res.data);
-    return res.data;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-// New - live streams only
+// Live streams only
 export const getStreamsLive = async () => {
   try {
     const res = await axios.get(`${route}/live`);
@@ -25,7 +14,7 @@ export const getStreamsLive = async () => {
   }
 };
 
-// New - demo streams only
+// Demo streams only
 export const getStreamsDemo = async () => {
   try {
     const res = await axios.get(`${route}/demo`);

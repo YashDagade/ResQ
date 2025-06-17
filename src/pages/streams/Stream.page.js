@@ -1,9 +1,9 @@
 // src/pages/Stream/Stream.page.js
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./Stream.module.css";
-import { call, getStreams, getStreamsLive, getStreamsDemo } from "../../api/routes";
+import { call, getStreamsLive, getStreamsDemo } from "../../api/routes";
 
-export const Stream = ({ onAnalyze, accidents, streamType = "legacy" }) => {
+export const Stream = ({ onAnalyze, accidents, streamType }) => {
   const [streamsList, setStreamsList] = useState([]);
   const [currentFrames, setCurrentFrames] = useState({});
   const [fps, setFps] = useState({});
@@ -15,18 +15,11 @@ export const Stream = ({ onAnalyze, accidents, streamType = "legacy" }) => {
 
   // Get the appropriate API function and WebSocket path based on streamType
   const getStreamsFunction = () => {
-    switch (streamType) {
-      case "live": return getStreamsLive;
-      case "demo": return getStreamsDemo;
-      default: return getStreams; // legacy
-    }
+    return streamType === "live" ? getStreamsLive : getStreamsDemo;
   };
 
   const getWebSocketPath = (id, type = "stream") => {
     const baseUrl = "wss://cdbackend.onrender.com/ws";
-    if (streamType === "legacy") {
-      return type === "analyze" ? `${baseUrl}/analyze/${id}` : `${baseUrl}/stream/${id}`;
-    }
     return type === "analyze" ? `${baseUrl}/${streamType}/analyze/${id}` : `${baseUrl}/${streamType}/${id}`;
   };
 
