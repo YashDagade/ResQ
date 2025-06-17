@@ -1,7 +1,7 @@
 // src/pages/Stream/Stream.page.js
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./Stream.module.css";
-import { call, getStreamsLive, getStreamsDemo } from "../../api/routes";
+import { call, getStreamsLive, getStreamsDemo, getWebSocketBaseUrl } from "../../api/routes";
 
 export const Stream = ({ onAnalyze, accidents, streamType }) => {
   const [streamsList, setStreamsList] = useState([]);
@@ -19,7 +19,7 @@ export const Stream = ({ onAnalyze, accidents, streamType }) => {
   };
 
   const getWebSocketPath = (id, type = "stream") => {
-    const baseUrl = "wss://cdbackend.onrender.com/ws";
+    const baseUrl = getWebSocketBaseUrl();
     return type === "analyze" ? `${baseUrl}/${streamType}/analyze/${id}` : `${baseUrl}/${streamType}/${id}`;
   };
 

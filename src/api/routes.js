@@ -1,7 +1,19 @@
 import axios from "axios";
 
-const route = "https://cdbackend.onrender.com";
+// 🎯 SINGLE POINT OF CONFIGURATION - Change this to switch between local/remote
+// const route = "https://cdbackend.onrender.com";
+const route = "http://localhost:8000";
+
 const localRoute = "http://localhost:5053";
+
+// 🚀 Auto-detect WebSocket URL based on the route
+export const getWebSocketBaseUrl = () => {
+  if (route.includes("localhost")) {
+    return "ws://localhost:8000/ws";
+  } else {
+    return "wss://cdbackend.onrender.com/ws";
+  }
+};
 
 // Live streams only
 export const getStreamsLive = async () => {
