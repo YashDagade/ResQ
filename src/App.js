@@ -43,9 +43,10 @@ export const NavBar = () => (
 );
 
 function App() {
-  const [accidents, setAccidents] = useState([]);
+  const [liveAccidents, setLiveAccidents] = useState([]);
+  const [demoAccidents, setDemoAccidents] = useState([]);
 
-  const handleAnalyze = (payload) => {
+  const createHandleAnalyze = (setAccidents) => (payload) => {
     const obj = {
       title: "Accident on " + payload.stream_id,
       time: new Date(payload.timestamp)
@@ -101,6 +102,9 @@ function App() {
     }, 20000);
   };
 
+  const handleLiveAnalyze = createHandleAnalyze(setLiveAccidents);
+  const handleDemoAnalyze = createHandleAnalyze(setDemoAccidents);
+
   return (
     <Router>
       <NavBar />
@@ -111,8 +115,8 @@ function App() {
             path="/live"
             element={
               <>
-                <Stream onAnalyze={handleAnalyze} accidents={accidents} streamType="live" />
-                <SideBar accidents={accidents} />
+                <Stream onAnalyze={handleLiveAnalyze} accidents={liveAccidents} streamType="live" />
+                <SideBar accidents={liveAccidents} />
               </>
             }
           />
@@ -120,8 +124,8 @@ function App() {
             path="/demo"
             element={
               <>
-                <Stream onAnalyze={handleAnalyze} accidents={accidents} streamType="demo" />
-                <SideBar accidents={accidents} />
+                <Stream onAnalyze={handleDemoAnalyze} accidents={demoAccidents} streamType="demo" />
+                <SideBar accidents={demoAccidents} />
               </>
             }
           />
