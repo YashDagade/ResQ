@@ -115,6 +115,10 @@
 
 .buttonContainer {
   margin-top: 3rem;
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .beginButton {
@@ -135,6 +139,7 @@
   box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
   position: relative;
   overflow: hidden;
+  min-width: 180px;
 }
 
 .beginButton::before {

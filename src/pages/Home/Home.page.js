@@ -81,9 +81,13 @@ export const Home = () => {
           </div>
 
           <div className={styles.buttonContainer}>
-            <NavLink to="/detect" className={styles.beginButton}>
-              <span>Start Detection</span>
-              <span className={styles.buttonIcon}>→</span>
+            <NavLink to="/live" className={styles.beginButton}>
+              <span>Live Cameras</span>
+              <span className={styles.buttonIcon}>📹</span>
+            </NavLink>
+            <NavLink to="/demo" className={styles.beginButton}>
+              <span>Demo Clips</span>
+              <span className={styles.buttonIcon}>🎬</span>
             </NavLink>
           </div>
         </div>

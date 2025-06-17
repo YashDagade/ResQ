@@ -1,9 +1,9 @@
 // src/pages/Stream/Stream.page.js
 import React, { useEffect, useState, useRef } from "react";
 import styles from "./Stream.module.css";
-import { call, getStreams } from "../../api/routes";
+import { call, getStreams, getStreamsLive, getStreamsDemo } from "../../api/routes";
 
-export const Stream = ({ onAnalyze, accidents }) => {
+export const Stream = ({ onAnalyze, accidents, streamType = "legacy" }) => {
   const [streamsList, setStreamsList] = useState([]);
   const [currentFrames, setCurrentFrames] = useState({});
   const [fps, setFps] = useState({});
@@ -13,20 +13,37 @@ export const Stream = ({ onAnalyze, accidents }) => {
   const timesRef = useRef({});
   const prevAccidentKeys = useRef([]);
 
+  // Get the appropriate API function and WebSocket path based on streamType
+  const getStreamsFunction = () => {
+    switch (streamType) {
+      case "live": return getStreamsLive;
+      case "demo": return getStreamsDemo;
+      default: return getStreams; // legacy
+    }
+  };
+
+  const getWebSocketPath = (id, type = "stream") => {
+    const baseUrl = "wss://cdbackend.onrender.com/ws";
+    if (streamType === "legacy") {
+      return type === "analyze" ? `${baseUrl}/analyze/${id}` : `${baseUrl}/stream/${id}`;
+    }
+    return type === "analyze" ? `${baseUrl}/${streamType}/analyze/${id}` : `${baseUrl}/${streamType}/${id}`;
+  };
+
   // 1) fetch streams once
   useEffect(() => {
-    getStreams()
+    getStreamsFunction()()
       .then((data) => data.streams && setStreamsList(data.streams))
       .catch((err) => console.error("getStreams error", err));
-  }, []);
+  }, [streamType]);
 
   // 2) open a socket per stream when it first appears
   useEffect(() => {
     streamsList.forEach(({ id }) => {
       if (socketsRef.current[id]) return;
 
-      const ws = new WebSocket(`wss://cdbackend.onrender.com/ws/stream/${id}`);
-      const as = new WebSocket(`wss://cdbackend.onrender.com/ws/analyze/${id}`);
+      const ws = new WebSocket(getWebSocketPath(id));
+      const as = new WebSocket(getWebSocketPath(id, "analyze"));
       socketsRef.current[id] = { ws, as };
 
       ws.addEventListener("open", () =>
@@ -88,7 +105,7 @@ export const Stream = ({ onAnalyze, accidents }) => {
         console.error(`Analyze socket error on ${id}:`, e)
       );
     });
-  }, [streamsList, onAnalyze]);
+  }, [streamsList, onAnalyze, streamType]);
 
   // 3) trigger glow only for newly added accidents
   useEffect(() => {

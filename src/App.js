@@ -23,6 +23,22 @@ export const NavBar = () => (
     </NavLink>
     <div className={styles.links}>
       <NavLink
+        to="/live"
+        className={({ isActive }) =>
+          `${styles.link} ${isActive ? styles.active : ""}`
+        }
+      >
+        Live
+      </NavLink>
+      <NavLink
+        to="/demo"
+        className={({ isActive }) =>
+          `${styles.link} ${isActive ? styles.active : ""}`
+        }
+      >
+        Demo
+      </NavLink>
+      <NavLink
         to="/detect"
         className={({ isActive }) =>
           `${styles.link} ${isActive ? styles.active : ""}`
@@ -99,6 +115,24 @@ function App() {
       <div className={styles.container}>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route
+            path="/live"
+            element={
+              <>
+                <Stream onAnalyze={handleAnalyze} accidents={accidents} streamType="live" />
+                <SideBar accidents={accidents} />
+              </>
+            }
+          />
+          <Route
+            path="/demo"
+            element={
+              <>
+                <Stream onAnalyze={handleAnalyze} accidents={accidents} streamType="demo" />
+                <SideBar accidents={accidents} />
+              </>
+            }
+          />
           <Route
             path="/detect"
             element={
